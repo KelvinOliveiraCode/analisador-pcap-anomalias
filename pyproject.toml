@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "analisador-pcap-anomalias"
+version = "0.1.0"
+description = "Analisador de tráfego PCAP com detecção de anomalias de volume e protocolo"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "scapy>=2.5.0",
+    "pandas>=2.0",
+]
+
+[project.scripts]
+analisador-pcap = "analisador_pcap_anomalias.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
