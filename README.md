@@ -1,19 +1,17 @@
 # analisador-pcap-anomalias
 
-## Descrição / Description
+## Descrição
 
-Analisador de tráfego PCAP escrito em Python com scapy e pandas. Lê um arquivo de captura (.pcap), extrai os pacotes IP, agrega o tráfego por host e protocolo, e detecta anomalias de volume e de protocolo com base em limiares configuráveis. Gera um relatório textual no terminal e pode gravá-lo em arquivo UTF-8.
+Analisador de tráfego PCAP escrito em Python com scapy e pandas. Lê um arquivo de captura (.pcap), extrai os pacotes IP, agrega o tráfego por host e protocolo, e detecta anomalias de volume e de protocolo com base em limiares configuráveis. Gera um relatório textual no terminal e pode gravá-lo em um arquivo UTF-8. Pacotes sem camada IP (por exemplo, ARP) são ignorados.
 
-PCAP traffic analyzer written in Python with scapy and pandas. Reads a capture file (.pcap), extracts IP packets, aggregates traffic by host and protocol, and detects volume and protocol anomalies based on configurable thresholds. Prints a textual report to the terminal and can save it to a UTF-8 file.
-
-## Stack
+## Pilha
 
 - Python 3.10+
-- scapy — leitura de PCAP / PCAP reading
-- pandas — estatísticas por protocolo / per-protocol statistics
-- pytest — testes / tests
+- scapy>=2.5.0 — leitura de arquivos PCAP
+- pandas>=2.0 — estatísticas agregadas por protocolo
+- pytest — execução dos testes
 
-## Como usar / How to use
+## Instalação
 
 Crie um ambiente virtual e instale as dependências:
 
@@ -30,6 +28,8 @@ Instale o pacote em modo editável (opcional):
 pip install -e .
 ```
 
+## Uso
+
 Rode a análise sobre um arquivo PCAP:
 
 ```
@@ -43,7 +43,7 @@ python -m analisador_pcap_anomalias captura.pcap \
   --limiar-volume 500000 --limiar-protocolo 50 --saida relatorio.txt
 ```
 
-O programa imprime o relatório no terminal e encerra com código 0. Com `--saida`, grava o mesmo conteúdo em um arquivo UTF-8.
+Limiares padrão: `--limiar-volume` de 1000000 bytes por host e `--limiar-protocolo` de 100 pacotes por protocolo. O programa imprime o relatório no terminal e encerra com código 0. Com `--saida`, grava o mesmo conteúdo em um arquivo UTF-8. Após instalar o pacote, também está disponível o comando `analisador-pcap`.
 
 Exemplo de saída do programa:
 
@@ -64,27 +64,21 @@ Anomalias encontradas: 2
 Fim do relatório.
 ```
 
-## Como executar os testes / How to run tests
+## Relatório de anomalias
+
+- volume: host cuja soma de bytes como origem e destino excede `--limiar-volume`.
+- protocolo: protocolo cuja contagem de pacotes excede `--limiar-protocolo`.
+- gravidade: baixa quando o valor excede o limiar em menos de 2x, media entre 2x e 5x, alta a partir de 5x. Proporcional ao quanto o valor excede o limiar.
+
+## Testes
 
 ```
 pytest
 ```
 
-Todos os testes geram seus próprios PCAPs sintéticos com scapy; não são necessários arquivos de captura externos.
+Todos os testes geram seus próprios PCAPs sintéticos e determinísticos com scapy; não são necessários arquivos de captura externos.
 
-All tests generate their own synthetic PCAPs with scapy; no external capture files are needed.
-
-## Relatório de anomalias / Anomaly report
-
-- volume: host cuja soma de bytes (como origem e destino) ultrapassa `--limiar-volume`.
-- protocolo: protocolo cuja contagem de pacotes ultrapassa `--limiar-protocolo`.
-- gravidade: baixa, media ou alta, proporcional ao quanto o valor excede o limiar.
-
-- volume: host whose total bytes (as source and destination) exceed `--limiar-volume`.
-- protocolo: protocol whose packet count exceeds `--limiar-protocolo`.
-- severity: baixa, media, or alta, proportional to how much the value exceeds the threshold.
-
-## Licença / License
+## Licença
 
 MIT License
 
@@ -108,6 +102,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Autor / Author
+## Autor
 
 Kelvin Oliveira
