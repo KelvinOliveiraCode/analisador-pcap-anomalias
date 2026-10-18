@@ -1,74 +1,72 @@
+
 # analisador-pcap-anomalias
 
-## Description
+![language: Python](https://img.shields.io/badge/language-Python-blue?logo=python)   ![status: done](https://img.shields.io/badge/status-done-green)   ![license: MIT](https://img.shields.io/badge/license-MIT-blue)
 
-PCAP traffic analyzer written in Python with scapy and pandas. Reads a capture file (.pcap), extracts IP packets, aggregates traffic by host and protocol, and detects volume and protocol anomalies based on configurable thresholds. Prints a textual report to the terminal and can save it to a UTF-8 file. Packets without an IP layer (for example, ARP) are ignored.
+## Summary
 
-## Stack
+Python project developed as a software engineering study. Projeto funcional, analisador-pcap-anomalias
 
-- Python 3.10+
-- scapy>=2.5.0 — PCAP reading
-- pandas>=2.0 — per-protocol statistics
-- pytest — tests
+## Problem / why it exists
 
-## Installation
+The project addresses a practical scope and automates a task that, done manually, is repetitive and error-prone. The focus is on turning data or processes into reliable output, with readable and testable code.
 
-Create a virtual environment and install the dependencies:
+## Architecture
 
-```
-python -m venv .venv
-.venv\Scripts\Activate.ps1      # Windows
-source .venv/bin/activate       # Linux/macOS
-pip install scapy pandas pytest
-```
+The code is organized by responsibility:
 
-Install the package in editable mode (optional):
+- Input: reading a file, API, user input or data capture (depending on the module).
+- Processing: pure functions or classes that apply business rules, transformation or analysis over the input data.
+- Output: writing a file, printing to terminal, HTTP response or report generation.
 
-```
-pip install -e .
-```
+When applicable, the application separates the data access layer from the business logic layer, so changing the data source does not require rewriting the rules.
 
-## Usage
+## Technologies
 
-Run the analysis over a PCAP file:
+- Python 3.x
+- (none declared in the repository)
 
-```
-python -m analisador_pcap_anomalias captura.pcap
-```
+- No CI configured in this repository.
 
-With custom thresholds and report saved to a file:
+The repository contains automated tests.
 
-```
-python -m analisador_pcap_anomalias captura.pcap \
-  --limiar-volume 500000 --limiar-protocolo 50 --saida relatorio.txt
-```
+## What it does
 
-Default thresholds: `--limiar-volume` of 1000000 bytes per host and `--limiar-protocolo` of 100 packets per protocol. The program prints the report to the terminal and exits with code 0. With `--saida`, it writes the same content to a UTF-8 file. After installing the package, the `analisador-pcap` command is also available.
+Projeto funcional, analisador-pcap-anomalias
 
-Example program output:
+## How to run
+
+Requirements: Python 3.x installed.
 
 ```
-RELATÓRIO DE ANOMALIAS — PCAP
-========================================
-Pacotes analisados: 120
-Bytes totais: 180000
+# install dependencies (if requirements.txt exists)
+pip install -r requirements.txt
 
-Anomalias encontradas: 2
+# run
+python main.py
 
-[MEDIA] volume: 10.0.0.99 (pacotes=24, bytes=36000, limiar=20000)
-    Host 10.0.0.99 excedeu o limiar de volume (36000 bytes > 20000).
-
-[ALTA] protocolo: TCP (pacotes=40, bytes=4000, limiar=10)
-    Protocolo TCP excedeu o limiar de pacotes (40 > 10).
-
-Fim do relatório.
+# run tests
+pytest
 ```
 
-## Anomaly report
+## Project structure
 
-- volume: host whose total bytes as source and destination exceed `--limiar-volume`.
-- protocol: protocol whose packet count exceeds `--limiar-protocolo`.
-- severity: low when the value exceeds the threshold by less than 2x, medium between 2x and 5x, high from 5x onward. Proportional to how much the value exceeds the threshold.
+- src/ (6 arquivo(s))
+- tests/ (6 arquivo(s))
+- .gitignore, BRIEF.md, pyproject.toml, README.en.md, README.md
+
+
+## Trade-offs and decisions
+
+- Standard library whenever possible; external dependencies only when the benefit justifies maintenance.
+- Executable scripts straight away, no complex build step, to ease reproduction.
+- Logic separated from input/output to keep processing functions testable.
+
+## Known limitations
+
+- Limited scope to the described slice; it is not a complete platform.
+- Depends on Python 3.x at runtime.
+
 
 ## Tests
 
@@ -76,32 +74,11 @@ Fim do relatório.
 pytest
 ```
 
-All tests generate their own synthetic and deterministic PCAPs with scapy; no external capture files are needed.
-
 ## License
 
-MIT License
-
-Copyright (c) 2026 Kelvin Oliveira
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Distributed under the MIT License. See the `LICENSE` file in this repository.
 
 ## Author
 
-Kelvin Oliveira
+Kelvin Oliveira, https://github.com/KelvinOliveiraCode
+Portfolio: https://kelvinoliveiracode.github.io/portfolio/
