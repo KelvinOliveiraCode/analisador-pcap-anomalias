@@ -1,118 +1,81 @@
 # analisador-pcap-anomalias
 
-<div align="center">
-
 **English** · [Português (Brasil)](README.md)
 
-</div>
-
-[![Python 3](https://img.shields.io/badge/Python-3.x-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/) [![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikit-learn)](https://scikit-learn.org/) [![pandas](https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas)](https://pandas.pydata.org/) [![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest)](https://docs.pytest.org/) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
-
-### Projeto funcional ,  analisador-pcap-anomalias
-
----
+[![Python 3](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](#) [![scapy](https://img.shields.io/badge/scapy-3776AB?style=flat-square)](#) [![pandas](https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas)](#) [![pytest](https://img.shields.io/badge/pytest-26%20tests-0A9EDC?style=flat-square&logo=pytest)](#) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
 
 ## What it is
 
-Projeto funcional ,  analisador-pcap-anomalias
+**PCAP anomaly analyser**: reads a PCAP file (captured network traffic), extracts packets, computes per-protocol statistics and **detects anomalies** — hosts with excessive byte volumes or protocols with an abnormal packet count. It is an educational network-traffic analysis and security lab.
 
----
+## Status
 
-## Quick Start
+An educational lab, working and tested (26 tests).
 
-```bash
-# Clone and enter
-git clone https://github.com/KelvinOliveiraCode/<repo>.git
-cd <repo>
+## Features
 
-# Install dependencies
-# No requirements.txt detected
+- **PCAP reading** (`analisador.py`): `ler_pcap` — loads packets from a PCAP file and normalises them into `Pacote` dataclasses; `estatisticas_dataframe` builds a pandas DataFrame.
+- **Detection** (`detector.py`): `detectar_anomalias` — volume per host (bytes) and atypical protocol (packets); returns a list of `Anomalia` with severity (high/medium/low).
+- **Report** (`relatorio.py`): text output with sections per anomaly type.
+- **CLI**: `analisador-pcap <pcap> [--limiar-volume] [--limiar-protocolo] [--saida]`.
 
-# Run the project
-python main.py
+## Architecture
 
-# Run tests
-pytest
+An `analisador_pcap_anomalias` package with `analisador.py` (reading/statistics), `detector.py` (anomaly rules) and `relatorio.py` (output).
+
+## Stack
+
+- Python ≥ 3.10, scapy, pandas
+- pytest (dev)
+
+## Repository layout
+
+```
+analisador-pcap-anomalias/
+├── pyproject.toml · BRIEF.md
+├── src/analisador_pcap_anomalias/
+│   ├── analisador.py   # PCAP reading + statistics
+│   ├── detector.py     # anomaly detection
+│   ├── relatorio.py    # text output
+│   └── cli.py          # CLI
+├── tests/              # 26 tests
+└── LICENSE             # MIT
 ```
 
-## How it works
+## Prerequisites and installation
 
-Estrutura limpa e modular com separação de responsabilidades.
+```bash
+pip install -e .
+```
 
----
+## How to run
 
-## Capabilities
+```bash
+analisador-pcap capture.pcap
+analisador-pcap capture.pcap --limiar-volume 500000 --limiar-protocolo 50 --saida report.txt
+```
 
-| Capacidade | Descrição |
-|------------|-------------|
-| Carregamento de Dados | Auto-download do TensorFlow creditcard.csv (284k transações) com cache local |
-| EDA e Visualização | Distribuição de classes, histogramas de Amount, heatmaps de correlação (matplotlib/seaborn) |
-| Pré-processamento | RobustScaler em Amount/Time, split estratificado, remoção de duplicatas |
-| Balanceamento | SMOTE oversampling (fallback: class_weight="balanced") |
-| Modelagem | LogisticRegression, RandomForest, ExtraTrees com RandomizedSearchCV (StratifiedKFold) |
-| Métricas | Accuracy, Precision, Recall, F1, ROC AUC, Specificity, Confusion Matrix |
-| Seleção | Score ponderado: Recall 40% + F1 30% + Precision 20% + Accuracy 10% |
-| Persistência | Serialização joblib para modelo, scaler e resultados completos |
+## Tests and quality
 
+```bash
+PYTHONPATH=src python -m pytest tests/
+# 26 passed
+```
 
----
+## Technical decisions and trade-offs
 
+- Scapy + pandas: a mature combination for traffic analysis; pandas enables fast aggregation but adds a dependency.
+- Simple threshold-based anomalies: transparent and tunable; no ML or advanced heuristics.
 
+## Known limitations
 
----
+- Offline analysis (saved PCAP), not real-time.
+- Detection by volume/protocol only; no payload analysis, signatures or fine temporal correlation.
 
-## FAQ
+## Development process
 
-<details>
-<summary><strong>What is this project?</strong></summary>
+An individual project by Kelvin Oliveira, built with orchestrated AI agents and reviewed by the author.
 
-A Python study/project demonstrating core concepts.
+## License and author
 
-</details>
-
-<details>
-<summary><strong>How do I run it?</strong></summary>
-
-See [Quick Start](#quick-start) for copy-paste commands.
-
-</details>
-
-<details>
-<summary><strong>Are there tests?</strong></summary>
-
-No automated tests in this repository.
-
-</details>
-
-<details>
-<summary><strong>Can I use this in production?</strong></summary>
-
-This is a **study/portfolio project**. Review and harden (auth, persistence, monitoring, etc.) before production use.
-
-</details>
-
-
-
----
-
-## Documentation
-
-- **Source Code** ,  Browse the `src/` directory for implementation details
-- **API Reference** ,  Inline docstrings + type hints
-- **Architecture Diagram** ,  See [architecture.mermaid](docs/architecture.mermaid) (if present)
-- **Changelog** ,  [CHANGELOG.md](CHANGELOG.md) (if present)
-- **Contributing** ,  [CONTRIBUTING.md](CONTRIBUTING.md) (if present)
-
-## License
-
-[MIT](LICENSE) ,  Kelvin Oliveira
-
----
-
-<div align="center">
-
-**Built with** · Python 3 + scikit-learn + pandas
-
-**Author** · [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfolio](https://kelvinoliveiracode.github.io/portfolio/)
-
-</div>
+MIT — Copyright (c) 2026 Kelvin Rebelo de Oliveira. Author: [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfolio](https://kelvinoliveiracode.github.io/portfolio/)
