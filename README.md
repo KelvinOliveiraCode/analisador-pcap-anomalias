@@ -1,118 +1,81 @@
 # analisador-pcap-anomalias
 
-<div align="center">
-
 [English](README.en.md) · **Português (Brasil)**
 
-</div>
-
-[![Python 3](https://img.shields.io/badge/Python-3.x-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/) [![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikit-learn)](https://scikit-learn.org/) [![pandas](https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas)](https://pandas.pydata.org/) [![pytest](https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest)](https://docs.pytest.org/) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
-
-### Projeto funcional ,  analisador-pcap-anomalias
-
----
+[![Python 3](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)](#) [![scapy](https://img.shields.io/badge/scapy-3776AB?style=flat-square)](#) [![pandas](https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas)](#) [![pytest](https://img.shields.io/badge/pytest-26%20testes-0A9EDC?style=flat-square&logo=pytest)](#) [![MIT License](https://img.shields.io/badge/License-MIT-f4c430?style=flat-square)](LICENSE)
 
 ## O que é
 
-Projeto funcional ,  analisador-pcap-anomalias
+**Analisador de anomalias em PCAP**: lê um arquivo PCAP (tráfego de rede capturado), extrai pacotes, calcula estatísticas por protocolo e **detecta anomalias** — hosts com volume excessivo de bytes ou protocolos com número anormal de pacotes. É um laboratório educacional de análise de tráfego e segurança de redes.
 
----
+## Status
 
-## Início Rápido
+Laboratório educacional funcional e testado (26 testes).
 
-```bash
-# Clone e entre
-git clone https://github.com/KelvinOliveiraCode/<repo>.git
-cd <repo>
+## Funcionalidades
 
-# Instale dependências
-# Nenhum requirements.txt detectado
+- **Leitura de PCAP** (`analisador.py`): `ler_pcap` — carrega pacotes de um arquivo PCAP e os normaliza em dataclasses `Pacote`; `estatisticas_dataframe` monta um DataFrame pandas.
+- **Detecção** (`detector.py`): `detectar_anomalias` — volume por host (bytes) e protocolo atípico (pacotes); retorna lista de `Anomalia` com gravidade (alta/média/baixa).
+- **Relatório** (`relatorio.py`): saída textual com seções por tipo de anomalia.
+- **CLI**: `analisador-pcap <pcap> [--limiar-volume] [--limiar-protocolo] [--saida]`.
 
-# Execute o projeto
-python main.py
+## Arquitetura
 
-# Execute os testes
-pytest
+Pacote `analisador_pcap_anomalias` com `analisador.py` (leitura/estatísticas), `detector.py` (regras de anomalia) e `relatorio.py` (saída).
+
+## Stack
+
+- Python ≥ 3.10, scapy, pandas
+- pytest (dev)
+
+## Estrutura do repositório
+
+```
+analisador-pcap-anomalias/
+├── pyproject.toml · BRIEF.md
+├── src/analisador_pcap_anomalias/
+│   ├── analisador.py   # leitura de PCAP + estatísticas
+│   ├── detector.py     # detecção de anomalias
+│   ├── relatorio.py    # saída textual
+│   └── cli.py          # CLI
+├── tests/              # 26 testes
+└── LICENSE             # MIT
 ```
 
-## Como funciona
+## Pré-requisitos e instalação
 
-Estrutura limpa e modular com separação de responsabilidades.
+```bash
+pip install -e .
+```
 
----
+## Como executar
 
-## Capacidades
+```bash
+analisador-pcap captura.pcap
+analisador-pcap captura.pcap --limiar-volume 500000 --limiar-protocolo 50 --saida relatorio.txt
+```
 
-| Capacidade | Descrição |
-|------------|-------------|
-| Carregamento de Dados | Auto-download do TensorFlow creditcard.csv (284k transações) com cache local |
-| EDA e Visualização | Distribuição de classes, histogramas de Amount, heatmaps de correlação (matplotlib/seaborn) |
-| Pré-processamento | RobustScaler em Amount/Time, split estratificado, remoção de duplicatas |
-| Balanceamento | SMOTE oversampling (fallback: class_weight="balanced") |
-| Modelagem | LogisticRegression, RandomForest, ExtraTrees com RandomizedSearchCV (StratifiedKFold) |
-| Métricas | Accuracy, Precision, Recall, F1, ROC AUC, Specificity, Confusion Matrix |
-| Seleção | Score ponderado: Recall 40% + F1 30% + Precision 20% + Accuracy 10% |
-| Persistência | Serialização joblib para modelo, scaler e resultados completos |
+## Testes e qualidade
 
+```bash
+PYTHONPATH=src python -m pytest tests/
+# 26 passed
+```
 
----
+## Decisões técnicas e trade-offs
 
+- Scapy + pandas: combinação madura para análise de tráfego; pandas permite agregações rápidas mas adiciona dependência.
+- Anomalias por limiares simples: transparente e ajustável; sem ML nem heurísticas avançadas.
 
+## Limitações conhecidas
 
----
+- Análise offline (PCAP salvo), não em tempo real.
+- Detecção por volume/protocolo apenas; sem análise de payload, assinaturas ou correlação temporal fina.
 
-## Perguntas Frequentes
+## Processo de desenvolvimento
 
-<details>
-<summary><strong>O que é este projeto?</strong></summary>
+Projeto individual de Kelvin Oliveira, construído com agentes de IA orquestrados e revisado pelo autor.
 
-Um estudo/projeto em Python demonstrando conceitos fundamentais.
+## Licença e autor
 
-</details>
-
-<details>
-<summary><strong>Como executar?</strong></summary>
-
-Veja [Início Rápido](#início-rápido) para comandos copiáveis.
-
-</details>
-
-<details>
-<summary><strong>Há testes?</strong></summary>
-
-Nenhum teste automatizado neste repositório.
-
-</details>
-
-<details>
-<summary><strong>Posso usar em produção?</strong></summary>
-
-Este é um **projeto de estudo/portfólio**. Revise e endureça (auth, persistência, monitoramento, etc.) antes de usar em produção.
-
-</details>
-
-
-
----
-
-## Documentação
-
-- **Código-Fonte** ,  Navegue pelo diretório `src/` para detalhes de implementação
-- **Referência da API** ,  Docstrings inline + type hints
-- **Diagrama de Arquitetura** ,  Veja [architecture.mermaid](docs/architecture.mermaid) (se presente)
-- **Changelog** ,  [CHANGELOG.md](CHANGELOG.md) (se presente)
-- **Contribuindo** ,  [CONTRIBUTING.md](CONTRIBUTING.md) (se presente)
-
-## Licença
-
-[MIT](LICENSE) ,  Kelvin Oliveira
-
----
-
-<div align="center">
-
-**Construído com** · Python 3 + scikit-learn + pandas
-
-**Autor** · [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfolio](https://kelvinoliveiracode.github.io/portfolio/)
-
-</div>
+MIT — Copyright (c) 2026 Kelvin Rebelo de Oliveira. Autor: [Kelvin Oliveira](https://github.com/KelvinOliveiraCode) · [Portfólio](https://kelvinoliveiracode.github.io/portfolio/)
